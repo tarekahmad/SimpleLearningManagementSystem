@@ -208,7 +208,7 @@ public class Main {
 
                {
 
-                   System.out.println( courses.get(Integer.getInteger(idarray[i])).toString());
+                   System.out.println( courses.get(Integer.valueOf(idarray[i])-1).toString());
                }
 
             }
@@ -255,18 +255,18 @@ public class Main {
         for (Object o : a) {
             JSONObject person = (JSONObject) o;
             JSONArray studentcourses = (JSONArray) person.get(Integer.toString(id));
-        if (studentcourses==null){
-            break;
-            }
+        //if (studentcourses==null){
+          //  break;
+           // }
 
             //for (Object c : studentcourses) {
                 //System.out.println(c + "");
             //}
 
-            int length = ( studentcourses.toArray()).length;
-            String studentcoursesarray[] = new String[length];
-            System.arraycopy(studentcourses.toArray(), 0, studentcoursesarray, 0, length);
-            return( studentcoursesarray);
+         //   int length = ( studentcourses.toArray()).length;
+           // String studentcoursesarray[] = new String[length];
+            //System.arraycopy(studentcourses.toArray(), 0, studentcoursesarray, 0, length);
+           // return( studentcoursesarray);
 
         }
 
