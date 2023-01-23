@@ -244,12 +244,11 @@ public class Main {
             for (Object c : studentcourses) {
                 //System.out.println(c + "");
             }
-           return( studentcourses.toArray());
+            return( studentcourses.toArray());
 
         }
 
-
-
+return (null);
 
     }
 
