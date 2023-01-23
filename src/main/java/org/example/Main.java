@@ -24,9 +24,8 @@ public class Main {
         PathName="src/main/java/org/example/coursedata.xml";
         String[][] coursessarray = Readcourses(PathName);
 
-        int selectedstudentx=HomePage(Studentsarray,coursessarray);
+        int selectedstudentx=HomePage(Studentsarray);
         printStudents(Studentsarray,selectedstudentx);
-
         Object[] enrolledcourses =Jsonreader(selectedstudentx);
 
     }//end main
@@ -252,20 +251,70 @@ return (null);
 
     }
 
-    public static int getstudentinput(){
-        Scanner myObj = new Scanner(System.in);
-        // validation required
+    public static int getstudentinput(String[][] Studentsarray){
+        int[] idarrays=new int[Studentsarray.length];
+        for (int i=0;i<Studentsarray.length;i++)
+        {
+            idarrays[i]=Integer.valueOf(Studentsarray[i][0]);
+        }
+        int x=-1   ;
+        boolean correctid=false;
+        Scanner sc = new Scanner(System.in);
 
-        return (myObj.nextInt());
+        if(sc.hasNextInt())
+        {
+            x=sc.nextInt();
+            for (int id : idarrays)
+            {
+                if (id == x)
+                {           return (x);
+                }
+            }
+
+
+                System.out.println("Enter correct id");
+                sc.next();
+                return (-1);
+
+        }
+        else {
+            System.out.println("Enter correct id");
+
+            sc.next();
+            return (-1);
+        }
+
+
+        // for (String id : idarrays)
+        //  {
+        //    if (id == Integer.toString(X))
+
+        //     {
+        //      sc.close();
+
+        //      return (X);
+
+        //   }
+        //    else {X=-1;}
+        //   }
+
 
     }
-    public static int HomePage(String[][] Studentsarray, String[][] coursessarray){
+    public static int HomePage(String[][] Studentsarray){
         String seperator="====================================================================================\n";
+        String seperator2="------------------------------------------------------------------------------------\n";
         System.out.println("Welcome to LMS\n"+"created by {TarekAhmed_21.Jan.2023}\n"+seperator+"Home page\n"+seperator);
         System.out.println("Student List:");
         printStudents(Studentsarray,0);
-        System.out.println(seperator+"Please select the required student:");
-        return (getstudentinput());
-    }
+        System.out.println(seperator2+"Please select the required student:");
 
-}
+        int id=-1;
+         while(id==-1)
+        {
+            id = getstudentinput(Studentsarray);
+
+        }
+        return id;
+
+}}
+
