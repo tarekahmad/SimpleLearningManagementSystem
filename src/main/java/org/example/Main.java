@@ -250,14 +250,54 @@ public class Main {
 
     public static String[] getstudentcourses( int id ) throws IOException, ParseException {
 
+
+
         JSONParser parser = new JSONParser();
         JSONArray a = (JSONArray) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
         for (Object o : a) {
             JSONObject person = (JSONObject) o;
             JSONArray studentcourses = (JSONArray) person.get(Integer.toString(id));
-        //if (studentcourses==null){
-          //  break;
-           // }
+            System.out.println( "");
+
+             if (studentcourses!=null){
+                 int length = ( studentcourses.toArray()).length;
+                    String studentcoursesarray[] = new String[length];
+                    System.arraycopy(studentcourses.toArray(), 0, studentcoursesarray, 0, length);
+                     return( studentcoursesarray);
+            }
+
+
+        }
+
+        return (null);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //JSONParser parser = new JSONParser();
+      //  JSONArray a = (JSONArray) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
+      //  for (Object o : a) {
+       //     JSONObject person = (JSONObject) o;
+       //     JSONArray studentcourses = (JSONArray) person.get("1");
+      //  if (studentcourses==null){
+         //   break;
+         //   }
 
             //for (Object c : studentcourses) {
                 //System.out.println(c + "");
@@ -268,9 +308,9 @@ public class Main {
             //System.arraycopy(studentcourses.toArray(), 0, studentcoursesarray, 0, length);
            // return( studentcoursesarray);
 
-        }
+      //  }
 
-            return (null);
+        //    return (null);
 
     }
 
