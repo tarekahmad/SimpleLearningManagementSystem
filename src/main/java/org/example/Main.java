@@ -26,7 +26,8 @@ public class Main {
 
         int selectedstudentx=HomePage(Studentsarray);
         printStudents(Studentsarray,selectedstudentx);
-        Object[] enrolledcourses =Jsonreader(selectedstudentx);
+        String [] enrolledcourses =getstudentcourses(selectedstudentx);
+        printCourses(coursessarray,false,enrolledcourses);
 
     }//end main
 
@@ -181,11 +182,11 @@ public class Main {
             System.out.println( students.get(id-1).simpletoString());
         }
     }
-    static void printCourses(String[][] coursessarray,int id){
+    static void printCourses(String[][] coursessarray,boolean all, String[] idarray){
 
         ArrayList<Course> courses = new ArrayList<>();
         courses= CreateCoursesList(coursessarray);
-        if (id ==0)
+        if (all)
         {
             System.out.println( courses.get(1).Header());
         for (Course course : courses) {
@@ -194,7 +195,25 @@ public class Main {
         }
         else
         {
-            System.out.println( courses.get(id-1).toString());
+            if (idarray==null)
+            {
+                System.out.println("Enrolled Courses\n"+"The student hasn't enrolled in any course yet.\n"+
+                        "------------------------------------------------------------------------------------");
+            }
+            else
+            {
+                System.out.println( courses.get(1).Header());
+
+                for(int i=0;i<idarray.length;i++)
+
+               {
+
+                   System.out.println( courses.get(Integer.getInteger(idarray[i])).toString());
+               }
+
+            }
+
+
         }
     }
     //string array to student list
@@ -229,7 +248,7 @@ public class Main {
         return courses;
     }
 
-    public static Object[] Jsonreader( int id ) throws IOException, ParseException {
+    public static String[] getstudentcourses( int id ) throws IOException, ParseException {
 
         JSONParser parser = new JSONParser();
         JSONArray a = (JSONArray) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
@@ -240,14 +259,18 @@ public class Main {
             break;
             }
 
-            for (Object c : studentcourses) {
+            //for (Object c : studentcourses) {
                 //System.out.println(c + "");
-            }
-            return( studentcourses.toArray());
+            //}
+
+            int length = ( studentcourses.toArray()).length;
+            String studentcoursesarray[] = new String[length];
+            System.arraycopy(studentcourses.toArray(), 0, studentcoursesarray, 0, length);
+            return( studentcoursesarray);
 
         }
 
-return (null);
+            return (null);
 
     }
 
@@ -316,5 +339,21 @@ return (null);
         }
         return id;
 
-}}
+}
+
+public static int MenuList(){
+
+return 1;
+}
+
+
+
+
+
+
+
+
+
+
+}
 
