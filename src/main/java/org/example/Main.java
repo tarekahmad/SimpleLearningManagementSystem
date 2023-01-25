@@ -19,17 +19,18 @@ import org.json.simple.parser.ParseException;
 
 public class Main {
     public static void main(String[] args) throws IOException, ParseException {
+
+  String PathName="src/main/java/org/example/student-data.txt";
+        String[][] Studentsarray = Readstudents(PathName);
+        PathName="src/main/java/org/example/coursedata.xml";
+       String[][] coursessarray = Readcourses(PathName);
+
+        int selectedstudentx=HomePage(Studentsarray);
+       printStudents(Studentsarray,selectedstudentx);
+        String [] enrolledcourses =getstudentcourses(selectedstudentx);
+  printCourses(coursessarray,false,enrolledcourses);
         MenuList();
-
-      //  String PathName="src/main/java/org/example/student-data.txt";
-       // String[][] Studentsarray = Readstudents(PathName);
-       // PathName="src/main/java/org/example/coursedata.xml";
-      //  String[][] coursessarray = Readcourses(PathName);
-
-     //   int selectedstudentx=HomePage(Studentsarray);
-       /// printStudents(Studentsarray,selectedstudentx);
-      //  String [] enrolledcourses =getstudentcourses(selectedstudentx);
-      //  printCourses(coursessarray,false,enrolledcourses);
+        EnrollInaCourse();
 
     }//end main
 
@@ -252,14 +253,12 @@ public class Main {
 
     public static String[] getstudentcourses( int id ) throws IOException, ParseException {
 
-
-
         JSONParser parser = new JSONParser();
         JSONArray a = (JSONArray) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
         for (Object o : a) {
             JSONObject person = (JSONObject) o;
             JSONArray studentcourses = (JSONArray) person.get(Integer.toString(id));
-            System.out.println( "");
+            //System.out.println( "");
 
              if (studentcourses!=null){
                  int length = ( studentcourses.toArray()).length;
@@ -315,16 +314,12 @@ public class Main {
                 {           return (x);
                 }
             }
-
-
                 System.out.println("Enter correct id");
                 sc.next();
                 return (-1);
-
         }
         else {
             System.out.println("Enter correct id");
-
             sc.next();
             return (-1);
         }
@@ -356,7 +351,6 @@ public class Main {
         boolean done=false;
 
         Scanner sc = new Scanner(System.in);
-        String x="";
         do
         {
             if (sc.hasNextLine())
@@ -384,7 +378,6 @@ public class Main {
 
                     default:
                         System.out.println("please select the required action from the listed menu:");
-
                 }
             }
         }    while (!done) ;
@@ -392,6 +385,43 @@ public class Main {
 
 
     }
+    public static void EnrollInaCourse() throws IOException, ParseException {
+
+        JSONParser parser = new JSONParser();
+        JSONArray a = (JSONArray) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
+        JSONArray b=new JSONArray();
+        for (Object o : a) {
+
+            JSONObject person = (JSONObject) o;
+            person.remove("3");
+            b.add(person);
+
+        }
+
+
+
+        //Write JSON file
+        try (FileWriter file = new FileWriter("src/main/java/org/example/Student course details.json")) {
+            //We can write any JSONArray or JSONObject instance to the file
+            file.write(b.toJSONString());
+            file.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+
+
+    }
+    public static void UnenrollInaCourse(){}
+    public static void ReplaceCourse(){}
+
 
 
 
