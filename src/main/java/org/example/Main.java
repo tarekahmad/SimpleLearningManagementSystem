@@ -19,15 +19,17 @@ import org.json.simple.parser.ParseException;
 
 public class Main {
     public static void main(String[] args) throws IOException, ParseException {
-        String PathName="src/main/java/org/example/student-data.txt";
-        String[][] Studentsarray = Readstudents(PathName);
-        PathName="src/main/java/org/example/coursedata.xml";
-        String[][] coursessarray = Readcourses(PathName);
+        MenuList();
 
-        int selectedstudentx=HomePage(Studentsarray);
-        printStudents(Studentsarray,selectedstudentx);
-        String [] enrolledcourses =getstudentcourses(selectedstudentx);
-        printCourses(coursessarray,false,enrolledcourses);
+      //  String PathName="src/main/java/org/example/student-data.txt";
+       // String[][] Studentsarray = Readstudents(PathName);
+       // PathName="src/main/java/org/example/coursedata.xml";
+      //  String[][] coursessarray = Readcourses(PathName);
+
+     //   int selectedstudentx=HomePage(Studentsarray);
+       /// printStudents(Studentsarray,selectedstudentx);
+      //  String [] enrolledcourses =getstudentcourses(selectedstudentx);
+      //  printCourses(coursessarray,false,enrolledcourses);
 
     }//end main
 
@@ -268,29 +270,9 @@ public class Main {
 
 
         }
-
         return (null);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //JSONParser parser = new JSONParser();
+       //JSONParser parser = new JSONParser();
       //  JSONArray a = (JSONArray) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
       //  for (Object o : a) {
        //     JSONObject person = (JSONObject) o;
@@ -346,22 +328,6 @@ public class Main {
             sc.next();
             return (-1);
         }
-
-
-        // for (String id : idarrays)
-        //  {
-        //    if (id == Integer.toString(X))
-
-        //     {
-        //      sc.close();
-
-        //      return (X);
-
-        //   }
-        //    else {X=-1;}
-        //   }
-
-
     }
     public static int HomePage(String[][] Studentsarray){
         String seperator="====================================================================================\n";
@@ -375,16 +341,61 @@ public class Main {
          while(id==-1)
         {
             id = getstudentinput(Studentsarray);
-
         }
         return id;
 
 }
 
-public static int MenuList(){
+    public static void MenuList() {
+        System.out.println("Please choose from the following:\n" +
+                "a - Enroll in a course\n" +
+                "d - Unenroll from an existing course\n" +
+                "r - Replacing an existing course\n" +
+                "b - Back to the main page\n" +
+                "please select the required action:");
+        boolean done=false;
 
-return 1;
-}
+        Scanner sc = new Scanner(System.in);
+        String x="";
+        do
+        {
+            if (sc.hasNextLine())
+            {
+                switch ( sc.nextLine())
+                {
+                    case "a":
+                        System.out.println("a");
+                        done=true;
+                        break;
+                    case "d":
+                        System.out.println("d");
+                        done=true;
+                        break;
+                    case "r":
+                        System.out.println("r");
+                        done=true;
+
+                        break;
+                    case "b":
+                        System.out.println("b");
+                        done=true;
+
+                        break;
+
+                    default:
+                        System.out.println("please select the required action from the listed menu:");
+
+                }
+            }
+        }    while (!done) ;
+
+
+
+    }
+
+
+
+
 
 
 
