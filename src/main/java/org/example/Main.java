@@ -29,8 +29,7 @@ public class Main {
         String [] enrolledcourses =jsonreader(selectedstudentx);
         printCourses(coursessarray,false,enrolledcourses);
         MenuList();
-        EnrollInaCourse();
-
+        EnrollInaCourse(selectedstudentx);
     }//end main
 
 
@@ -191,9 +190,10 @@ public class Main {
         if (all)
         {
             System.out.println( courses.get(1).Header());
-        for (Course course : courses) {
-            System.out.println(course.toString());
-        }
+            for (Course course : courses)
+            {
+                System.out.println(course.toString());
+            }
         }
         else
         {
@@ -204,12 +204,13 @@ public class Main {
             }
             else
             {
-                System.out.println( courses.get(1).Header());
+                System.out.println("Enrolled Courses\n"+
+                                    "------------------------------------------------------------------------------------\n"+
+                                    courses.get(1).Header());
 
                 for(int i=0;i<idarray.length;i++)
 
                {
-
                    System.out.println( courses.get(Integer.valueOf(idarray[i])-1).toString());
                }
 
@@ -260,14 +261,10 @@ public class Main {
             String  x= (allstudents.get(Integer.toString(id))).toString();
             x= x.replace("[","");
             x= x.replace("]","");
-
             String[] studentcoursesarray = x.split(",");
             return( studentcoursesarray);
         }
-
-
        return( null);
-
     }
 
     public static int getstudentinput(String[][] Studentsarray){
@@ -360,13 +357,30 @@ public class Main {
 
 
     }
-    public static void EnrollInaCourse() throws IOException, ParseException {
+    public static void EnrollInaCourse(int id) throws IOException, ParseException {
+
+        String [] OldCoursesArray= jsonreader(id);
+        if (OldCoursesArray.length >= 6) {
+
+
+        }
+
+
+
 
         JSONParser parser = new JSONParser();
         JSONObject allstudents = (JSONObject) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
-        allstudents.remove("3");
+        allstudents.remove(Integer.toString(id));
 
 
+        JSONArray NewCoursesArray = new JSONArray();
+        for(String x : OldCoursesArray)
+        {
+            NewCoursesArray.add(x);
+        }
+        NewCoursesArray.add("9");
+
+        allstudents.put(Integer.toString(id), NewCoursesArray);
 
         //Write JSON file
         try (FileWriter file = new FileWriter("src/main/java/org/example/Student course details.json")) {

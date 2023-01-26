@@ -81,7 +81,8 @@ public class Student {
     public String simpletoString()
     {
                return(
-               "Student Details page\n"+
+               "====================================================================================\n"+
+                 "Student Details page\n"+
                "====================================================================================\n"+
                 String.format("%-26s","name: "+ name)+
                 String.format("%-13s", "Grade: "+Grade)+
