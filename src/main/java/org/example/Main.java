@@ -19,15 +19,15 @@ import org.json.simple.parser.ParseException;
 public class Main {
     public static void main(String[] args) throws IOException, ParseException {
 
-  String PathName="src/main/java/org/example/student-data.txt";
+        String PathName="src/main/java/org/example/student-data.txt";
         String[][] Studentsarray = Readstudents(PathName);
         PathName="src/main/java/org/example/coursedata.xml";
-       String[][] coursessarray = Readcourses(PathName);
+        String[][] coursessarray = Readcourses(PathName);
 
         int selectedstudentx=HomePage(Studentsarray);
-       printStudents(Studentsarray,selectedstudentx);
-        String [] enrolledcourses =getstudentcourses(selectedstudentx);
-  printCourses(coursessarray,false,enrolledcourses);
+        printStudents(Studentsarray,selectedstudentx);
+        String [] enrolledcourses =jsonreader(selectedstudentx);
+        printCourses(coursessarray,false,enrolledcourses);
         MenuList();
         EnrollInaCourse();
 
@@ -250,24 +250,23 @@ public class Main {
         return courses;
     }
 
-    public static String[] getstudentcourses( int id ) throws IOException, ParseException {
+    public static String[] jsonreader( int id ) throws IOException, ParseException {
 
         JSONParser parser = new JSONParser();
-        Object obj = parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
-        JSONObject allstudents = (JSONObject) obj;
+        JSONObject allstudents = (JSONObject) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
         JSONArray SelectedStudentCourses = (JSONArray) allstudents.get(Integer.toString(id));
 
-
-
         if (SelectedStudentCourses!=null){
-            int length = ( SelectedStudentCourses.toArray()).length;
-            String[] studentcoursesarray = new String [length];
-        //str a[]=SelectedStudentCourses.toArray();
-            studentcoursesarray = SelectedStudentCourses.toArray().toString().split(",");
-            System.arraycopy(SelectedStudentCourses.toArray(), 0, studentcoursesarray, 0, length);
-            return( null);
+            String  x= (allstudents.get(Integer.toString(id))).toString();
+            x= x.replace("[","");
+            x= x.replace("]","");
+
+            String[] studentcoursesarray = x.split(",");
+            return( studentcoursesarray);
         }
-        else {return( null);}
+
+
+       return( null);
 
     }
 
@@ -364,22 +363,15 @@ public class Main {
     public static void EnrollInaCourse() throws IOException, ParseException {
 
         JSONParser parser = new JSONParser();
-        JSONArray a = (JSONArray) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
-        JSONArray b=new JSONArray();
-        for (Object o : a) {
-
-            JSONObject person = (JSONObject) o;
-            person.remove("3");
-            b.add(person);
-
-        }
+        JSONObject allstudents = (JSONObject) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
+        allstudents.remove("3");
 
 
 
         //Write JSON file
         try (FileWriter file = new FileWriter("src/main/java/org/example/Student course details.json")) {
             //We can write any JSONArray or JSONObject instance to the file
-            file.write(b.toJSONString());
+            file.write(allstudents.toJSONString());
             file.flush();
 
         } catch (IOException e) {
