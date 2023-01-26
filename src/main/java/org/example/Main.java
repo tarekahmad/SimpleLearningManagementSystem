@@ -3,15 +3,14 @@ import java.io.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
+
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Set;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -254,44 +253,21 @@ public class Main {
     public static String[] getstudentcourses( int id ) throws IOException, ParseException {
 
         JSONParser parser = new JSONParser();
-        JSONArray a = (JSONArray) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
-        for (Object o : a) {
-            JSONObject person = (JSONObject) o;
-            JSONArray studentcourses = (JSONArray) person.get(Integer.toString(id));
-            //System.out.println( "");
-
-             if (studentcourses!=null){
-                 int length = ( studentcourses.toArray()).length;
-                    String studentcoursesarray[] = new String[length];
-                    System.arraycopy(studentcourses.toArray(), 0, studentcoursesarray, 0, length);
-                     return( studentcoursesarray);
-            }
+        Object obj = parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
+        JSONObject allstudents = (JSONObject) obj;
+        JSONArray SelectedStudentCourses = (JSONArray) allstudents.get(Integer.toString(id));
 
 
+
+        if (SelectedStudentCourses!=null){
+            int length = ( SelectedStudentCourses.toArray()).length;
+            String[] studentcoursesarray = new String [length];
+        //str a[]=SelectedStudentCourses.toArray();
+            studentcoursesarray = SelectedStudentCourses.toArray().toString().split(",");
+            System.arraycopy(SelectedStudentCourses.toArray(), 0, studentcoursesarray, 0, length);
+            return( null);
         }
-        return (null);
-
-       //JSONParser parser = new JSONParser();
-      //  JSONArray a = (JSONArray) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
-      //  for (Object o : a) {
-       //     JSONObject person = (JSONObject) o;
-       //     JSONArray studentcourses = (JSONArray) person.get("1");
-      //  if (studentcourses==null){
-         //   break;
-         //   }
-
-            //for (Object c : studentcourses) {
-                //System.out.println(c + "");
-            //}
-
-         //   int length = ( studentcourses.toArray()).length;
-           // String studentcoursesarray[] = new String[length];
-            //System.arraycopy(studentcourses.toArray(), 0, studentcoursesarray, 0, length);
-           // return( studentcoursesarray);
-
-      //  }
-
-        //    return (null);
+        else {return( null);}
 
     }
 
