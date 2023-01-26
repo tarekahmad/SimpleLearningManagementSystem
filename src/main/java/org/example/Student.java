@@ -87,7 +87,7 @@ public class Student {
                 String.format("%-26s","name: "+ name)+
                 String.format("%-13s", "Grade: "+Grade)+
                 String.format("%-47s", "email: "+ email)+
-                "\n ------------------------------------------------------------------------------------\n");
+                "\n------------------------------------------------------------------------------------");
     }
     public String Header()
     {

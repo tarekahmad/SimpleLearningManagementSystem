@@ -10,6 +10,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -29,7 +30,7 @@ public class Main {
         String [] enrolledcourses =jsonreader(selectedstudentx);
         printCourses(coursessarray,false,enrolledcourses);
         MenuList();
-        EnrollInaCourse(selectedstudentx);
+        EnrollInaCourse(selectedstudentx,coursessarray);
     }//end main
 
 
@@ -267,11 +268,11 @@ public class Main {
        return( null);
     }
 
-    public static int getstudentinput(String[][] Studentsarray){
-        int[] idarrays=new int[Studentsarray.length];
-        for (int i=0;i<Studentsarray.length;i++)
+    public static int ValidateIDInput(String[][] ObjectArray){
+        int[] idarrays=new int[ObjectArray.length];
+        for (int i=0;i<ObjectArray.length;i++)
         {
-            idarrays[i]=Integer.valueOf(Studentsarray[i][0]);
+            idarrays[i]=Integer.valueOf(ObjectArray[i][0]);
         }
         int x=-1   ;
         boolean correctid=false;
@@ -291,6 +292,10 @@ public class Main {
                 return (-1);
         }
         else {
+
+
+            if( sc.nextLine()=="b")
+            { MenuList();}
             System.out.println("Enter correct id");
             sc.next();
             return (-1);
@@ -307,7 +312,7 @@ public class Main {
         int id=-1;
          while(id==-1)
         {
-            id = getstudentinput(Studentsarray);
+            id = ValidateIDInput(Studentsarray);
         }
         return id;
 
@@ -357,49 +362,52 @@ public class Main {
 
 
     }
-    public static void EnrollInaCourse(int id) throws IOException, ParseException {
-
-        String [] OldCoursesArray= jsonreader(id);
-        if (OldCoursesArray.length >= 6) {
-
-
-        }
 
 
 
+    public static void EnrollInaCourse(int id,String[][] CourseArray) throws IOException, ParseException {
 
-        JSONParser parser = new JSONParser();
-        JSONObject allstudents = (JSONObject) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
-        allstudents.remove(Integer.toString(id));
+        System.out.println("Enrollment page\n"+"====================================================================================================\n");
+        printCourses(CourseArray,true,null);
+      do {
+          System.out.println("----------------------------------------------------------------------------------------------------\n" +
+                  "Please make one of the following:\n" +
+                  "Enter the course id that you want to enroll the student to\n" +
+                  "Enter b to go back to the home page\n" +
+                  "Please select the required action:");
+          int TheNewCourse = ValidateIDInput(CourseArray);
 
+          String[] OldCoursesArray = jsonreader(id);
+          if (OldCoursesArray.length >= 6) {
+              System.out.println("cannot enroll the student in more courses");
+          } else {
+              JSONArray NewCoursesArray = new JSONArray();
+              JSONParser parser = new JSONParser();
+              JSONObject allstudents = (JSONObject) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
 
-        JSONArray NewCoursesArray = new JSONArray();
-        for(String x : OldCoursesArray)
-        {
-            NewCoursesArray.add(x);
-        }
-        NewCoursesArray.add("9");
+              if (OldCoursesArray != null) {
+                  allstudents.remove(Integer.toString(id));
+                  for (int x : Stream.of(OldCoursesArray).mapToInt(Integer::parseInt).toArray()) {
+                      NewCoursesArray.add(x);
+                  }
 
-        allstudents.put(Integer.toString(id), NewCoursesArray);
+              }
 
-        //Write JSON file
-        try (FileWriter file = new FileWriter("src/main/java/org/example/Student course details.json")) {
-            //We can write any JSONArray or JSONObject instance to the file
-            file.write(allstudents.toJSONString());
-            file.flush();
+              NewCoursesArray.add(TheNewCourse);
+              allstudents.put(Integer.toString(id), NewCoursesArray);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+              //Write JSON file
+              try (FileWriter file = new FileWriter("src/main/java/org/example/Student course details.json")) {
+                  //We can write any JSONArray or JSONObject instance to the file
+                  file.write(allstudents.toJSONString());
+                  file.flush();
 
-
-
-
-
-
-
-
-
+              } catch (IOException e) {
+                  e.printStackTrace();
+              }
+          }
+          //end
+      }while (true);
     }
     public static void UnenrollInaCourse(){}
     public static void ReplaceCourse(){}
