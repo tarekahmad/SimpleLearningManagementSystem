@@ -274,32 +274,62 @@ public class Main {
         {
             idarrays[i]=Integer.valueOf(ObjectArray[i][0]);
         }
-        int x=-1   ;
+        String x=""   ;
+        String Homepage="b"   ;
+
+        int y=-1;
         boolean correctid=false;
         Scanner sc = new Scanner(System.in);
 
-        if(sc.hasNextInt())
+
+        if(sc.hasNext())
         {
-            x=sc.nextInt();
+            x= sc.nextLine();
+        }
+
+
+
+        try {
+            y = Integer.parseInt(x);
             for (int id : idarrays)
             {
-                if (id == x)
-                {           return (x);
+                if (id == y)
+                {           return (y);
                 }
             }
-                System.out.println("Enter correct id");
-                sc.next();
-                return (-1);
-        }
-        else {
-
-
-            if( sc.nextLine()=="b")
-            { MenuList();}
             System.out.println("Enter correct id");
-            sc.next();
+           // sc.next();
             return (-1);
+
+        } catch (NumberFormatException e) {
+
+            switch (x) {
+                case "b":
+                    return (-2);
+                default:
+                    System.out.println("Enter correct id");
+                    //   sc.next();
+                    return (-1);
+            }
         }
+
+
+
+
+
+
+
+
+           // if( x== Homepage)
+        //    {
+           //     return (-2);
+          //  }
+       //     System.out.println("Enter correct id");
+         //   sc.next();
+       //     return (-1);
+      // }
+
+
     }
     public static int HomePage(String[][] Studentsarray){
         String seperator="====================================================================================\n";
@@ -313,6 +343,8 @@ public class Main {
          while(id==-1)
         {
             id = ValidateIDInput(Studentsarray);
+            System.out.println(id);
+
         }
         return id;
 
@@ -367,7 +399,7 @@ public class Main {
 
     public static void EnrollInaCourse(int id,String[][] CourseArray) throws IOException, ParseException {
 
-        System.out.println("Enrollment page\n"+"====================================================================================================\n");
+        System.out.println("Enrollment page\n"+"====================================================================================================");
         printCourses(CourseArray,true,null);
       do {
           System.out.println("----------------------------------------------------------------------------------------------------\n" +
@@ -406,7 +438,7 @@ public class Main {
                   e.printStackTrace();
               }
           }
-          //end
+
       }while (true);
     }
     public static void UnenrollInaCourse(){}
