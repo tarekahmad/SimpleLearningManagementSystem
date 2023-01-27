@@ -41,7 +41,7 @@ public class Main {
             {
                 case 1: skip=EnrollInaCourse(selectedstudentx,Studentsarray, coursessarray,enrolledcourses); break;
                 case 2: skip=UnenrollInaCourse(selectedstudentx,Studentsarray, coursessarray,enrolledcourses); break;
-                case 3: ReplaceCourse(selectedstudentx, coursessarray,enrolledcourses);break;
+                case 3: ReplaceCourse(selectedstudentx,Studentsarray, coursessarray,enrolledcourses);break;
                 case 4://Do nothing new iteration
 
             }
