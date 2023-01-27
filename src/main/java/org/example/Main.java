@@ -24,13 +24,21 @@ public class Main {
         String[][] Studentsarray = Readstudents(PathName);
         PathName="src/main/java/org/example/coursedata.xml";
         String[][] coursessarray = Readcourses(PathName);
+        do {
+            int selectedstudentx = HomePage(Studentsarray);
+            printStudents(Studentsarray, selectedstudentx);
+            String[] enrolledcourses = jsonreader(selectedstudentx);
+            printCourses(coursessarray, false, enrolledcourses);
+            int OpenPage =MenuList();
+            switch (OpenPage)
+            {
+                case 1: EnrollInaCourse(selectedstudentx, coursessarray);
+                case 2: UnenrollInaCourse();
+                case 3: ReplaceCourse();
+                case 4://Do nothing new iteration
 
-        int selectedstudentx=HomePage(Studentsarray);
-        printStudents(Studentsarray,selectedstudentx);
-        String [] enrolledcourses =jsonreader(selectedstudentx);
-        printCourses(coursessarray,false,enrolledcourses);
-        MenuList();
-        EnrollInaCourse(selectedstudentx,coursessarray);
+            }
+        }while (true);
     }//end main
 
 
