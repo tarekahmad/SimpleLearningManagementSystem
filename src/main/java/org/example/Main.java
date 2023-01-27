@@ -206,7 +206,7 @@ public class Main {
             else
             {
                 System.out.println("Enrolled Courses\n"+
-                                    "------------------------------------------------------------------------------------\n"+
+                        "------------------------------------------------------------------------------------\n"+
                                     courses.get(1).Header());
 
                 for(int i=0;i<idarray.length;i++)
@@ -275,29 +275,19 @@ public class Main {
             idarrays[i]=Integer.valueOf(ObjectArray[i][0]);
         }
         String x=""   ;
-        String Homepage="b"   ;
-
         int y=-1;
-        boolean correctid=false;
         Scanner sc = new Scanner(System.in);
-
-
         if(sc.hasNext())
         {
             x= sc.nextLine();
         }
-
-
-
         try {
             y = Integer.parseInt(x);
             for (int id : idarrays)
             {
-                if (id == y)
-                {           return (y);
-                }
+                if (id == y){return (y);}
             }
-            System.out.println("Enter correct id");
+            System.out.println("ID not exist Enter correct id");
             return (-1);
 
         } catch (NumberFormatException e) {
@@ -306,28 +296,10 @@ public class Main {
                 case "b":
                     return (-2);
                 default:
-                    System.out.println("Enter correct id");
+                    System.out.println("Enter valid input");
                     return (-1);
             }
         }
-
-
-
-
-
-
-
-
-           // if( x== Homepage)
-        //    {
-           //     return (-2);
-          //  }
-       //     System.out.println("Enter correct id");
-         //   sc.next();
-       //     return (-1);
-      // }
-
-
     }
     public static int HomePage(String[][] Studentsarray){
         String seperator="====================================================================================\n";
@@ -342,20 +314,19 @@ public class Main {
         {
             id = ValidateIDInput(Studentsarray);
             System.out.println(id);
-
         }
         return id;
 
 }
 
-    public static void MenuList() {
+    public static int  MenuList() {
         System.out.println("Please choose from the following:\n" +
                 "a - Enroll in a course\n" +
                 "d - Unenroll from an existing course\n" +
                 "r - Replacing an existing course\n" +
                 "b - Back to the main page\n" +
                 "please select the required action:");
-        boolean done=false;
+        //boolean done=false;
 
         Scanner sc = new Scanner(System.in);
         do
@@ -365,31 +336,24 @@ public class Main {
                 switch ( sc.nextLine())
                 {
                     case "a":
-                        System.out.println("a");
-                        done=true;
-                        break;
+                        //System.out.println("a");
+                       // done=true;
+                        //break;
+                        return(1);
                     case "d":
-                        System.out.println("d");
-                        done=true;
-                        break;
+                        return(2);
+
                     case "r":
-                        System.out.println("r");
-                        done=true;
+                        return(3);
 
-                        break;
                     case "b":
-                        System.out.println("b");
-                        done=true;
-
-                        break;
+                        return(4);
 
                     default:
                         System.out.println("please select the required action from the listed menu:");
                 }
             }
-        }    while (!done) ;
-
-
+        }    while (true) ;
 
     }
 
