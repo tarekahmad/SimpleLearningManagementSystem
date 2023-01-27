@@ -41,7 +41,7 @@ public class Main {
             {
                 case 1: skip=EnrollInaCourse(selectedstudentx,Studentsarray, coursessarray,enrolledcourses); break;
                 case 2: skip=UnenrollInaCourse(selectedstudentx,Studentsarray, coursessarray,enrolledcourses); break;
-                case 3: ReplaceCourse(selectedstudentx,Studentsarray, coursessarray,enrolledcourses);break;
+                case 3: skip=ReplaceCourse(selectedstudentx,Studentsarray, coursessarray,enrolledcourses);break;
                 case 4://Do nothing new iteration
 
             }
@@ -372,8 +372,9 @@ public class Main {
           while(TheNewCourse==-1)
           {
               TheNewCourse = ValidateIDInput(CourseArray);
+              if(OldCoursesArray!=null){
               for (String x:OldCoursesArray){if(TheNewCourse==Integer.valueOf(x)){System.out.println("the course already exist");return 1; } }
-          }
+          }}
           if (TheNewCourse==-2){return 0;}
 
           JSONArray NewCoursesArray = new JSONArray();
