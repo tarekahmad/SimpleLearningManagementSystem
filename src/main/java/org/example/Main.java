@@ -39,16 +39,14 @@ public class Main {
             skip=0;
             switch (OpenPage)
             {
-                case 1: skip=EnrollInaCourse(selectedstudentx, coursessarray); break;
-                case 2: skip=UnenrollInaCourse(selectedstudentx, coursessarray,enrolledcourses); break;
+                case 1: skip=EnrollInaCourse(selectedstudentx,Studentsarray, coursessarray,enrolledcourses); break;
+                case 2: skip=UnenrollInaCourse(selectedstudentx,Studentsarray, coursessarray,enrolledcourses); break;
                 case 3: ReplaceCourse(selectedstudentx, coursessarray,enrolledcourses);break;
                 case 4://Do nothing new iteration
 
             }
         }while (true);
     }//end main
-
-
 
 
 
@@ -355,61 +353,67 @@ public class Main {
 
     }
 
-    public static int EnrollInaCourse(int StudentId,String[][] CourseArray) throws IOException, ParseException {
+    public static int EnrollInaCourse(int StudentId,String[][] Studentsarray, String[][] CourseArray,String[] OldCoursesArray) throws IOException, ParseException {
         System.out.println("Enrollment page\n"+"====================================================================================================");
+        if (OldCoursesArray != null && OldCoursesArray.length >= 6) {
+            System.out.println("cannot enroll the student in more courses");
+            printStudents(Studentsarray, StudentId);
+            printCourses(CourseArray, false, OldCoursesArray);
+            return -1;
+        }
+
         printCourses(CourseArray,true,null);
-      do {
-          System.out.println("----------------------------------------------------------------------------------------------------\n" +
-                  "Please make one of the following:\n" +
-                  "**Enter the course id that you want to enroll the student to\n" +
-                  "** Or Enter b to go back to the home page\n" +
-                  "Please select the required action:");
+        System.out.println("----------------------------------------------------------------------------------------------------\n" +
+                "Please make one of the following:\n" +
+                "**Enter the course id that you want to enroll the student to\n" +
+                "** Or Enter b to go back to the home page\n" +
+                "Please select the required action:");
           int TheNewCourse=-1;
           while(TheNewCourse==-1)
           {
               TheNewCourse = ValidateIDInput(CourseArray);
+              for (String x:OldCoursesArray){if(TheNewCourse==Integer.valueOf(x)){System.out.println("the course already exist");return 1; } }
           }
           if (TheNewCourse==-2){return 0;}
 
+          JSONArray NewCoursesArray = new JSONArray();
+          JSONParser parser = new JSONParser();
+          JSONObject allstudents = (JSONObject) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
 
-          String[] OldCoursesArray = jsonreader(StudentId);
-          if (OldCoursesArray != null && OldCoursesArray.length >= 6) {
-              System.out.println("cannot enroll the student in more courses");
-          }
-          else
-          {
-              JSONArray NewCoursesArray = new JSONArray();
-              JSONParser parser = new JSONParser();
-              JSONObject allstudents = (JSONObject) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
-
-              if (OldCoursesArray != null) {
-                  allstudents.remove(Integer.toString(StudentId));
-                  for (int x : Stream.of(OldCoursesArray).mapToInt(Integer::parseInt).toArray()) {
-                      NewCoursesArray.add(x);
-                  }
+          if (OldCoursesArray != null) {
+              allstudents.remove(Integer.toString(StudentId));
+              for (int x : Stream.of(OldCoursesArray).mapToInt(Integer::parseInt).toArray()) {
+                  NewCoursesArray.add(x);
               }
+          }
 
-              NewCoursesArray.add(TheNewCourse);
-              allstudents.put(Integer.toString(StudentId), NewCoursesArray);
-              //Write JSON file
+          NewCoursesArray.add(TheNewCourse);
+          allstudents.put(Integer.toString(StudentId), NewCoursesArray);
+          System.out.println("The student has been enrolled successfully to "+CourseArray[TheNewCourse-1][1]+"course");
+
               try (FileWriter file = new FileWriter("src/main/java/org/example/Student course details.json")) {
                   file.write(allstudents.toJSONString());
                   file.flush();
               } catch (IOException e) {
                   e.printStackTrace();
               }
-          }
 
-      }while (true);
+              return 1;
+
     }
-    public static int UnenrollInaCourse(int StudentId,String[][] CourseArray,String[] OldCoursesArray) throws IOException, ParseException {
+    public static int UnenrollInaCourse(int StudentId,String[][] Studentsarray,String[][] CourseArray,String[] OldCoursesArray) throws IOException, ParseException {
         System.out.println("Unenrollment page\n"+"====================================================================================================");
       //  do {
         if (OldCoursesArray==null||OldCoursesArray.length<=1)
         {
             System.out.println("Faild to unenroll: The student as only one or no courses to unenroll from\n");
+            printStudents(Studentsarray, StudentId);
+            printCourses(CourseArray, false, OldCoursesArray);
             return -1;
         }
+        //printStudents(Studentsarray, StudentId);
+        //printCourses(CourseArray, false, OldCoursesArray);
+
             System.out.println("----------------------------------------------------------------------------------------------------\n" +
                     "Please make one of the following:\n" +
                     "**Enter the course id that you want to Unenroll the student from\n" +
@@ -435,7 +439,9 @@ public class Main {
                 { if (x!=removedcourse){ NewCoursesArray.add(x);}}
 
                 allstudents.put(Integer.toString(StudentId), NewCoursesArray);
-                //Write JSON file
+                System.out.println("The student has been unenrolled successfully from "+CourseArray[removedcourse-1][1]+"course");
+
+        //Write JSON file
                 try (FileWriter file = new FileWriter("src/main/java/org/example/Student course details.json")) {
                     //We can write any JSONArray or JSONObject instance to the file
                     file.write(allstudents.toJSONString());
@@ -445,7 +451,74 @@ public class Main {
                 }
             return 1;
     }
-    public static void ReplaceCourse(int StudentId,String[][] CourseArray,String[] OldCoursesArray){}
+    public static int ReplaceCourse(int StudentId,String[][] Studentsarray,String[][] CourseArray,String[] OldCoursesArray) throws IOException, ParseException {
+
+
+        System.out.println("replace course page\n"+"====================================================================================================");
+        if (OldCoursesArray==null)
+        {
+            System.out.println("No existing course for this student to be replaced\n");
+            printStudents(Studentsarray, StudentId);
+            printCourses(CourseArray, false, OldCoursesArray);
+            return -1;
+        }
+//========================================================================================
+        System.out.println("----------------------------------------------------------------------------------------------------\n" +
+                "Please make one of the following:\n" +
+                "**Please enter the course id to be replaced:\n" +
+                "** Or Enter b to go back to the home page\n" +
+                "Please select the required action:");
+        String[][] MOldCoursesArray=new String[OldCoursesArray.length][1];
+        for (int i=0;i<OldCoursesArray.length;i++){MOldCoursesArray[i][0] = OldCoursesArray[i];}
+
+        int removedcourse=-1;
+        while(removedcourse==-1)
+        {
+            removedcourse = ValidateIDInput(MOldCoursesArray);
+        }
+        if (removedcourse==-2){return 0;}
+//========================================================================================
+        printCourses(CourseArray,true,null);
+        System.out.println("----------------------------------------------------------------------------------------------------\n" +
+                "Please make one of the following:\n" +
+                "**Please enter the required course id to replace the old one\n" +
+                "** Or Enter b to go back to the home page\n" +
+                "Please select the required action:");
+        int TheNewCourse=-1;
+        while(TheNewCourse==-1)
+        {
+            TheNewCourse = ValidateIDInput(CourseArray);
+            for (String x:OldCoursesArray){if(TheNewCourse==Integer.valueOf(x)){System.out.println("the course already exist");return 1; } }
+        }
+        if (TheNewCourse==-2){return 0;}
+//========================================================================================
+
+        JSONArray NewCoursesArray = new JSONArray();
+        JSONParser parser = new JSONParser();
+        JSONObject allstudents = (JSONObject) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
+          allstudents.remove(Integer.toString(StudentId));
+
+        for (int x : Stream.of(OldCoursesArray).mapToInt(Integer::parseInt).toArray())
+        { if (x!=removedcourse){ NewCoursesArray.add(x);}}
+        NewCoursesArray.add(TheNewCourse);
+        allstudents.put(Integer.toString(StudentId), NewCoursesArray);
+
+        System.out.println("Courses replaced successfully from "+CourseArray[removedcourse-1][1]+"course to "+CourseArray[TheNewCourse-1][1]+"course");
+
+        //Write JSON file
+        try (FileWriter file = new FileWriter("src/main/java/org/example/Student course details.json")) {
+            //We can write any JSONArray or JSONObject instance to the file
+            file.write(allstudents.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 1;
+
+
+
+
+    }
 
 
 
