@@ -274,32 +274,60 @@ public class Main {
         {
             idarrays[i]=Integer.valueOf(ObjectArray[i][0]);
         }
-        int x=-1   ;
+        String x=""   ;
+        String Homepage="b"   ;
+
+        int y=-1;
         boolean correctid=false;
         Scanner sc = new Scanner(System.in);
 
-        if(sc.hasNextInt())
+
+        if(sc.hasNext())
         {
-            x=sc.nextInt();
+            x= sc.nextLine();
+        }
+
+
+
+        try {
+            y = Integer.parseInt(x);
             for (int id : idarrays)
             {
-                if (id == x)
-                {           return (x);
+                if (id == y)
+                {           return (y);
                 }
             }
-                System.out.println("Enter correct id");
-                sc.next();
-                return (-1);
-        }
-        else {
-
-
-            if( sc.nextLine()=="b")
-            { MenuList();}
             System.out.println("Enter correct id");
-            sc.next();
             return (-1);
+
+        } catch (NumberFormatException e) {
+
+            switch (x) {
+                case "b":
+                    return (-2);
+                default:
+                    System.out.println("Enter correct id");
+                    return (-1);
+            }
         }
+
+
+
+
+
+
+
+
+           // if( x== Homepage)
+        //    {
+           //     return (-2);
+          //  }
+       //     System.out.println("Enter correct id");
+         //   sc.next();
+       //     return (-1);
+      // }
+
+
     }
     public static int HomePage(String[][] Studentsarray){
         String seperator="====================================================================================\n";
@@ -313,6 +341,8 @@ public class Main {
          while(id==-1)
         {
             id = ValidateIDInput(Studentsarray);
+            System.out.println(id);
+
         }
         return id;
 
@@ -365,20 +395,26 @@ public class Main {
 
 
 
-    public static void EnrollInaCourse(int id,String[][] CourseArray) throws IOException, ParseException {
+    public static void EnrollInaCourse(int StudentId,String[][] CourseArray) throws IOException, ParseException {
 
-        System.out.println("Enrollment page\n"+"====================================================================================================\n");
+        System.out.println("Enrollment page\n"+"====================================================================================================");
         printCourses(CourseArray,true,null);
       do {
           System.out.println("----------------------------------------------------------------------------------------------------\n" +
                   "Please make one of the following:\n" +
-                  "Enter the course id that you want to enroll the student to\n" +
-                  "Enter b to go back to the home page\n" +
+                  "**Enter the course id that you want to enroll the student to\n" +
+                  "** Or Enter b to go back to the home page\n" +
                   "Please select the required action:");
-          int TheNewCourse = ValidateIDInput(CourseArray);
+          int TheNewCourse=-1;
+          while(TheNewCourse==-1)
+          {
+              TheNewCourse = ValidateIDInput(CourseArray);
+          }
+          if (TheNewCourse==-2){break;}
 
-          String[] OldCoursesArray = jsonreader(id);
-          if (OldCoursesArray.length >= 6) {
+
+          String[] OldCoursesArray = jsonreader(StudentId);
+          if (OldCoursesArray != null && OldCoursesArray.length >= 6) {
               System.out.println("cannot enroll the student in more courses");
           } else {
               JSONArray NewCoursesArray = new JSONArray();
@@ -386,7 +422,7 @@ public class Main {
               JSONObject allstudents = (JSONObject) parser.parse(new FileReader("src/main/java/org/example/Student course details.json"));
 
               if (OldCoursesArray != null) {
-                  allstudents.remove(Integer.toString(id));
+                  allstudents.remove(Integer.toString(StudentId));
                   for (int x : Stream.of(OldCoursesArray).mapToInt(Integer::parseInt).toArray()) {
                       NewCoursesArray.add(x);
                   }
@@ -394,8 +430,7 @@ public class Main {
               }
 
               NewCoursesArray.add(TheNewCourse);
-              allstudents.put(Integer.toString(id), NewCoursesArray);
-
+              allstudents.put(Integer.toString(StudentId), NewCoursesArray);
               //Write JSON file
               try (FileWriter file = new FileWriter("src/main/java/org/example/Student course details.json")) {
                   //We can write any JSONArray or JSONObject instance to the file
@@ -406,7 +441,7 @@ public class Main {
                   e.printStackTrace();
               }
           }
-          //end
+
       }while (true);
     }
     public static void UnenrollInaCourse(){}
