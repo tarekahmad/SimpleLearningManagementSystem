@@ -73,7 +73,6 @@ public class Main {
         String[] SplitedRows=StudentData.split("\n");
         SplitedRows[0] ="id, " +SplitedRows[0];
         String[][] Studentsarray = new String[SplitedRows.length-1][7];
-        //Studentsarray[0] = (SplitedRows[0].split(","));
 
         for(int i =1 ;i<SplitedRows.length;i++)
         {
@@ -83,7 +82,6 @@ public class Main {
             Studentsarray[i-1][1]= OneEntry[1];
             Studentsarray[i-1][2]= OneEntry[2];
             Studentsarray[i-1][3]= OneEntry[3];
-
             if(OneEntry.length==7){
                 Studentsarray[i-1][4]= OneEntry[4];
                 Studentsarray[i-1][5]= OneEntry[5];
@@ -94,10 +92,9 @@ public class Main {
                 Studentsarray[i-1][5]= OneEntry[6];
                 Studentsarray[i-1][6]= OneEntry[7];
             }
-            //System.out.println(SplitedRows[i]);
         }
 
-        WriteCSV(Studentsarray,"Students");
+        WriteCSV(Studentsarray,"Students.csv");
         return Studentsarray;
     }
     //xml to string array & then create csv
@@ -117,8 +114,6 @@ public class Main {
             e.printStackTrace();
         }
 
-
-
         CourseData = CourseData.replace("<id>", "");
         CourseData = CourseData.replace("<CourseName>", "");
         CourseData = CourseData.replace("<Instructor>", "");
@@ -130,7 +125,6 @@ public class Main {
         CourseData = CourseData.replace("</root>", "");
         CourseData = CourseData.replace("  </row>", "");
         CourseData = CourseData.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
-
         CourseData = CourseData.replace("</id>", ",");
         CourseData = CourseData.replace("</CourseName>", ",");
         CourseData = CourseData.replace("</Instructor>", ",");
@@ -155,16 +149,14 @@ public class Main {
 
             //System.out.println(SplitedRows[k]);
         }
-        WriteCSV(coursessarray,"Courses");
+        WriteCSV(coursessarray,"Courses.csv");
         return coursessarray;
     }
-    //string array to csv
+    //string array to csv file
     static void WriteCSV(String[][] Data, String FileName) throws IOException {
 
         File csvFile = new File(FileName);
         FileWriter fileWriter = new FileWriter(csvFile);
-
-        //write header line here if you need.
 
         for (String[] data : Data) {
             StringBuilder line = new StringBuilder();
@@ -180,7 +172,6 @@ public class Main {
             fileWriter.write(line.toString());
         }
         fileWriter.close();
-
     }
     static void printStudents(String[][] Studentsarray,int id){
         ArrayList<Student> students = new ArrayList<>();
@@ -229,8 +220,6 @@ public class Main {
                }
 
             }
-
-
         }
     }
     //string array to student list
@@ -352,7 +341,6 @@ public class Main {
         }    while (true) ;
 
     }
-
     public static int EnrollInaCourse(int StudentId,String[][] Studentsarray, String[][] CourseArray,String[] OldCoursesArray) throws IOException, ParseException {
         System.out.println("Enrollment page\n"+"====================================================================================================");
         if (OldCoursesArray != null && OldCoursesArray.length >= 6) {
